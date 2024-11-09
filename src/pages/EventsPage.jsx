@@ -1,18 +1,5 @@
 import React, { useEffect, useState, useDisclosure } from "react";
-import {
-  Button,
-  Heading,
-  Flex,
-  Box,
-  Modal,
-  ModalCloseButton,
-  ModalBody,
-  ModalOverlay,
-  ModalHeader,
-  ModalContent,
-  ModalFooter,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Heading, Flex, Box, Text } from "@chakra-ui/react";
 import { Link, useLoaderData } from "react-router-dom";
 
 // export const loader = async ({ params }) => {
@@ -59,13 +46,13 @@ export const EventsPage = () => {
     return match;
   }, {});
 
-  const [newEvent, setNewEvent] = useState(false);
-  const clickHandler = () => {
-    setNewEvent(true);
-  };
+  // const [newEvent, setNewEvent] = useState(false);
+  // const clickHandler = () => {
+  //   setNewEvent(true);
+  // };
 
   return (
-    <Flex flexDirection={{ lg: "row", base: "column" }}>
+    <Flex /*flexDirection={{ lg: "row", base: "column" }}*/ wrap="wrap">
       <div>
         <Heading>List of events</Heading>
 
@@ -94,7 +81,11 @@ export const EventsPage = () => {
             ))}
           </Link>
           <Link to="/event/newevent">
-            <Button className="Button" onClick={clickHandler}>
+            <Button
+              className="Button"
+              /*onClick={clickHandler}*/ color="white"
+              backgroundColor="black"
+            >
               Add event
             </Button>
           </Link>

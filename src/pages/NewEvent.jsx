@@ -20,23 +20,23 @@ export const NewEvent = () => {
   const users = useLoaderData();
   return (
     <div className="new-event">
-      <h1>New Event</h1>
-      <Form method="event" id="new-event-form">
+      <h1>Create New Event</h1>
+      <Form method="post" id="new-event-form">
         <label>
-          <span>Title</span>
+          <span>Activity: </span>
           <input
-            placeholder="An exciting title..."
+            placeholder="wat wilde doen dan"
             aria-label="Title"
             type="text"
             name="title"
           />
         </label>
         <label>
-          <span>Body</span>
-          <textarea name="body" aria-label="Body" rows="6" />
+          <span>Description: </span>
+          <textarea name="description" aria-label="description" rows="6" />
         </label>
         <label>
-          <span>User</span>
+          <span>User: </span>
           <select name="userId">
             {users.map((user) => (
               <option value={user.id}>{user.name}</option>
