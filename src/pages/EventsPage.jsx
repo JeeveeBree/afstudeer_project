@@ -1,5 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Heading } from "@chakra-ui/react";
+import React, { useEffect, useState, useDisclosure } from "react";
+import {
+  Button,
+  Heading,
+  Flex,
+  Box,
+  Modal,
+  ModalCloseButton,
+  ModalBody,
+  ModalOverlay,
+  ModalHeader,
+  ModalContent,
+  ModalFooter,
+  Text,
+} from "@chakra-ui/react";
 import { Link, useLoaderData } from "react-router-dom";
 
 // export const loader = async ({ params }) => {
@@ -46,34 +59,47 @@ export const EventsPage = () => {
     return match;
   }, {});
 
+  const [newEvent, setNewEvent] = useState(false);
+  const clickHandler = () => {
+    setNewEvent(true);
+  };
+
   return (
-    <div>
-      <Heading>List of events</Heading>
-      <ul>
-        <Link to="/event/:id">
-          {eventList.map((event) => (
-            <li key={event.id}>
-              {event.title}
-              <p>{event.description}</p>
-              <img
-                src={event.image}
-                alt={event.title}
-                style={{ maxWidth: "200px", borderRadius: "8px" }}
-              />
-              <p>
-                Start time: {new Date(event.startTime).toLocaleString()} End
-                time: {new Date(event.endTime).toLocaleString()}
-              </p>
-              <p>
-                Categories:{" "}
-                {event.categoryIds
-                  .map((categoryId) => categoryMatch[categoryId])
-                  .join(", ")}
-              </p>
-            </li>
-          ))}
-        </Link>
-      </ul>
-    </div>
+    <Flex flexDirection={{ lg: "row", base: "column" }}>
+      <div>
+        <Heading>List of events</Heading>
+
+        <ul>
+          <Link to="/event/:id">
+            {eventList.map((event) => (
+              <li key={event.id}>
+                <Box>{event.title}</Box>
+                <p>{event.description}</p>
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  style={{ maxWidth: "200px", borderRadius: "8px" }}
+                />
+                <p>
+                  Start time: {new Date(event.startTime).toLocaleString()} End
+                  time: {new Date(event.endTime).toLocaleString()}
+                </p>
+                <p>
+                  Categories:{" "}
+                  {event.categoryIds
+                    .map((categoryId) => categoryMatch[categoryId])
+                    .join(", ")}
+                </p>
+              </li>
+            ))}
+          </Link>
+          <Link to="/event/newevent">
+            <Button className="Button" onClick={clickHandler}>
+              Add event
+            </Button>
+          </Link>
+        </ul>
+      </div>
+    </Flex>
   );
 };
