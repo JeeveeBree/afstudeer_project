@@ -82,7 +82,8 @@ export const EventPage = () => {
     };
     fetchData();
   }, []);
-
+  console.log("event", event[0]);
+  console.log("event.title", event[0].title);
   return (
     <div className="event">
       {/* <h1>{event.title}</h1> */}
@@ -93,7 +94,7 @@ export const EventPage = () => {
         </Link>
       </p> */}
       {/* <p>{event.title}</p> */}
-      <p>{event?.title || "Event title not found"}</p>
+      <p>{event[0]?.title || "Event title not found"}</p>
       {/* <hr />
       {categories.length > 0 && (
         <div className="comments">

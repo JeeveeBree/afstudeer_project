@@ -55,11 +55,18 @@ export const EventsPage = () => {
     <Flex /*flexDirection={{ lg: "row", base: "column" }}*/ wrap="wrap">
       <div>
         <Heading>List of events</Heading>
-
+        <Link to="/event/newevent">
+          <Button className="Button" backgroundColor="black">
+            Add event
+          </Button>
+        </Link>
         <ul>
-          <Link to="/event/:id">
-            {eventList.map((event) => (
-              <li key={event.id}>
+          {eventList.map((event) => (
+            <li key={event.id}>
+              <Link
+                to={`/event/${event.id}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 <Box>{event.title}</Box>
                 <p>{event.description}</p>
                 <img
@@ -68,8 +75,9 @@ export const EventsPage = () => {
                   style={{ maxWidth: "200px", borderRadius: "8px" }}
                 />
                 <p>
-                  Start time: {new Date(event.startTime).toLocaleString()} End
-                  time: {new Date(event.endTime).toLocaleString()}
+                  Start time: {new Date(event.startTime).toLocaleString()}{" "}
+                  <br />
+                  End time: {new Date(event.endTime).toLocaleString()}
                 </p>
                 <p>
                   Categories:{" "}
@@ -77,18 +85,9 @@ export const EventsPage = () => {
                     .map((categoryId) => categoryMatch[categoryId])
                     .join(", ")}
                 </p>
-              </li>
-            ))}
-          </Link>
-          <Link to="/event/newevent">
-            <Button
-              className="Button"
-              /*onClick={clickHandler}*/ color="white"
-              backgroundColor="black"
-            >
-              Add event
-            </Button>
-          </Link>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
     </Flex>
