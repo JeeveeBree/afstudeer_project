@@ -9,7 +9,7 @@ export const action = async ({ request }) => {
   })
     .then((res) => res.json())
     .then((json) => json.id);
-  return redirect(`/post/${newId}`);
+  return redirect(`/events/${newId}`);
 };
 
 export const loader = async () => {

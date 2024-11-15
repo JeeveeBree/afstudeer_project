@@ -27,6 +27,12 @@ const router = createBrowserRouter([
         path: "/event/newevent",
         element: <NewEvent />,
         loader: newEventLoader,
+        // action:
+        // action: {async ({params, request}) => {
+        //   let formData = await request.formData();
+        //   return placeholder(params.newId, formData);
+        // }}
+        // action: {"`/events/${newId}`"},
       },
     ],
   },
