@@ -49,10 +49,8 @@ export const EventsPage = () => {
     let filtered = eventList;
 
     if (searchQuery) {
-      filtered = filtered.filter(
-        (event) =>
-          event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          event.description.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter((event) =>
+        event.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -119,7 +117,7 @@ export const EventsPage = () => {
                   borderRadius="lg"
                   boxShadow="dark-lg"
                   maxW="1fr"
-                  bgColor="yellow.200"
+                  bgColor="gray.300"
                   color="black"
                 >
                   <Link

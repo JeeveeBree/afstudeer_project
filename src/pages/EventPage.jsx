@@ -1,6 +1,15 @@
-import React, { useEffect } from "react";
-import { Heading } from "@chakra-ui/react";
+import React, { useEffect, useDisclosure } from "react";
+import { Heading, Button, Box, AspectRatio, Flex } from "@chakra-ui/react";
 import { useLoaderData, Link } from "react-router-dom";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
 
 export const loader = async ({ params }) => {
   if (!params.id) {
@@ -45,36 +54,50 @@ export const EventPage = () => {
   }, []);
   console.log("event", event[0]);
   console.log("event.title", event[0].title);
+
   return (
-    <div className="event">
-      <h1>{event[0].title}</h1>
-      {/* <p>
+    // <Flex p={2} m={2} flexWrap="wrap" justify="center" alignItems="center">
+    <Box>
+      <div className="event">
+        <Heading>{event[0].title}</Heading>
+        <p>{event[0].description}</p>
+        <AspectRatio maxH="20em" ratio={4 / 2}>
+          <img
+            src={event[0].image}
+            alt={event[0].title}
+            style={{ maxWidth: "50vw", borderRadius: "8px" }}
+          />
+        </AspectRatio>
+        <p>{event[0].startTime}</p>
+        <p>{event[0].endTime}</p>
+        {/* <p>
         by{" "}
         <Link to={`/user/${event.id}`}>
           {users.find((user) => user.id === event.userId).name}
         </Link>
       </p> */}
-      <p>
-        by{" "}
-        <Link to={`/user/${event[0]?.id || ""}`}>
+        <p>
+          by {/* <Link to={`/user/${event[0]?.id || ""}`}> */}
           {users.length > 0
             ? users.find((user) => user.id === event[0]?.userId)?.name ||
               "Unknown User"
             : "User data not available"}
-        </Link>
-      </p>
+          {/* </Link> */}
+        </p>
 
-      <p>{event[0]?.title || "Event title not found"}</p>
-      <hr />
-      {categories.length > 0 && (
-        <div className="comments">
-          <h2>Categories:</h2>
-          {categories.map((category) => {
-            return <div key={category.id} className="category"></div>;
-          })}
-        </div>
-      )}
-    </div>
+        <p>{event[0]?.title || "Event title not found"}</p>
+        {/* <hr /> */}
+        {categories.length > 0 && (
+          <div className="categories">
+            <h2>Categories:</h2>
+            {categories.map((category) => {
+              return <div key={category.id} className="category"></div>;
+            })}
+          </div>
+        )}
+      </div>
+    </Box>
+    // </Flex>
   );
 };
 

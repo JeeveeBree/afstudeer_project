@@ -17,6 +17,15 @@ export const loader = async () => {
   return await fetch("http://localhost:3000/users");
 };
 
+// fetch("http://localhost:3000/events", {
+//   method: "POST",
+//   body: JSON.stringify({ title: "Test Event" }),
+//   headers: { "Content-Type": "application/json" },
+// })
+//   .then((res) => res.json())
+//   .then(console.log)
+//   .catch(console.error);
+
 export const NewEvent = () => {
   const users = useLoaderData();
   return (
@@ -29,7 +38,36 @@ export const NewEvent = () => {
     >
       <div className="new-event">
         <h1>Create New Event</h1>
-        <Form method="post" id="new-event-form">
+        {/* <Form method="post" id="new-event-form"> */}
+        {/* <Form
+          method="post"
+          id="new-event-form"
+          onSubmit={(e) => console.log("Submitting form")}
+        > */}
+        <Form
+          method="post"
+          id="new-event-form"
+          onSubmit={async (e) => {
+            e.preventDefault(); // voorkom standaard gedrag
+            const formData = new FormData(e.target);
+            const payload = Object.fromEntries(formData.entries());
+
+            const response = await fetch("http://localhost:3000/events", {
+              method: "POST",
+              body: JSON.stringify(payload),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            if (response.ok) {
+              const result = await response.json();
+              console.log("Success:", result);
+            } else {
+              console.error("Failed to submit:", response.status);
+            }
+          }}
+        >
           <ul>
             <li>
               <label>
@@ -46,7 +84,7 @@ export const NewEvent = () => {
                 <span>Activity: </span>
                 <input
                   placeholder="Activity:"
-                  aria-label="Title"
+                  aria-label="title"
                   type="text"
                   name="title"
                 />
@@ -56,6 +94,7 @@ export const NewEvent = () => {
               <label>
                 <span>Description: </span>
                 <textarea
+                  placeholder="Description:"
                   name="description"
                   aria-label="description"
                   rows="1"
@@ -67,9 +106,9 @@ export const NewEvent = () => {
                 <span>Location: </span>
                 <input
                   placeholder="Location:"
-                  aria-label="Title"
+                  aria-label="location"
                   type="text"
-                  name="title"
+                  name="location"
                 />
               </label>
             </li>
@@ -78,9 +117,20 @@ export const NewEvent = () => {
                 <span>Start time: </span>
                 <input
                   placeholder="Start time"
-                  aria-label="Title"
-                  type="text"
-                  name="title"
+                  aria-label="startTime"
+                  type="time"
+                  name="start time"
+                />
+              </label>
+            </li>
+            <li>
+              <label>
+                <span>Start date: </span>
+                <input
+                  placeholder="Start date"
+                  aria-label="startDate"
+                  type="date"
+                  name="start date"
                 />
               </label>
             </li>
@@ -89,9 +139,9 @@ export const NewEvent = () => {
                 <span>End time: </span>
                 <input
                   placeholder="End time"
-                  aria-label="Title"
-                  type="text"
-                  name="title"
+                  aria-label="endTime"
+                  type="time"
+                  name="end time"
                 />
               </label>
             </li>
