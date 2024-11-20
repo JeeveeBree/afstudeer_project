@@ -105,6 +105,7 @@ export const NewEvent = () => {
                   placeholder="Description:"
                   name="description"
                   aria-label="description"
+                  type="textS"
                   rows="1"
                 />
               </label>
