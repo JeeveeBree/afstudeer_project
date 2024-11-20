@@ -72,11 +72,11 @@ export const NewEvent = () => {
             <li>
               <label>
                 <span>User: </span>
-                <select name="userId">
+                {/* <select name="userId">
                   {users.map((user) => (
                     <option value={user.id}>{user.name}</option>
                   ))}
-                </select>
+                </select> */}
               </label>
             </li>
             <li>
@@ -92,11 +92,11 @@ export const NewEvent = () => {
             </li>
             <label>
               <span>Categories: </span>
-              <select name="categories">
+              {/* <select name="categories">
                 {categories.map((category) => (
                   <option value={category.id}>{category.name}</option>
                 ))}
-              </select>
+              </select> */}
             </label>
             <li>
               <label>
@@ -123,34 +123,25 @@ export const NewEvent = () => {
             <li>
               <label>
                 <span>Start time: </span>
-                <input
-                  placeholder="Start time"
-                  aria-label="startTime"
-                  type="time"
-                  name="startTime"
-                />
+                <input aria-label="startTime" type="time" name="startTime" />
               </label>
             </li>
             <li>
               <label>
                 <span>Start date: </span>
-                <input
-                  placeholder="Start date"
-                  aria-label="startDate"
-                  type="date"
-                  name="start date"
-                />
+                <input aria-label="startDate" type="date" name="startDate" />
               </label>
             </li>
             <li>
               <label>
                 <span>End time: </span>
-                <input
-                  placeholder="End time"
-                  aria-label="endTime"
-                  type="time"
-                  name="end time"
-                />
+                <input aria-label="endTime" type="time" name="endTime" />
+              </label>
+            </li>
+            <li>
+              <label>
+                <span>End date: </span>
+                <input aria-label="endDate" type="date" name="endDate" />
               </label>
             </li>
 
@@ -162,8 +153,7 @@ export const NewEvent = () => {
   );
 };
 
-{
-  /* <Input
+/* <Input
   name="title"
   value={formState.title}
   onChange={handleInputChange}
@@ -185,4 +175,3 @@ const newEvent = {
   startTime: startDateTimeUTC,
   endTime: endDateTimeUTC,
 }; */
-}
