@@ -9,7 +9,7 @@ const SearchAndFilter = ({
   categoryList,
 }) => {
   return (
-    <Flex gap={4} mb={6} justify="center" align="center">
+    <Flex gap={4} mb={6} flexWrap="wrap" justify="center" align="center">
       <Input
         bg="white"
         placeholder="Search events"

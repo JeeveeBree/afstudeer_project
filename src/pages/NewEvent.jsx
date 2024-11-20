@@ -27,7 +27,7 @@ export const loader = async () => {
 //   .catch(console.error);
 
 export const NewEvent = () => {
-  const users = useLoaderData();
+  const [users, categories] = useLoaderData();
   return (
     <Flex
       gap={10}
@@ -90,6 +90,14 @@ export const NewEvent = () => {
                 />
               </label>
             </li>
+            <label>
+              <span>Categories: </span>
+              <select name="categories">
+                {categories.map((category) => (
+                  <option value={category.id}>{category.name}</option>
+                ))}
+              </select>
+            </label>
             <li>
               <label>
                 <span>Description: </span>
@@ -119,7 +127,7 @@ export const NewEvent = () => {
                   placeholder="Start time"
                   aria-label="startTime"
                   type="time"
-                  name="start time"
+                  name="startTime"
                 />
               </label>
             </li>
@@ -153,3 +161,28 @@ export const NewEvent = () => {
     </Flex>
   );
 };
+
+{
+  /* <Input
+  name="title"
+  value={formState.title}
+  onChange={handleInputChange}
+  required
+  placeholder="Title of the event"
+  backgroundColor={"gray.100"}
+  textColor={"black"}
+  mt={2}
+/>;
+const startDateTimeUTC = convertLocalToUTC(formState.startDateTime);
+const newEvent = {
+  id: undefined,
+  createdBy: formState.userId,
+  title: formState.title,
+  description: formState.description,
+  image: formState.imageUrl,
+  categoryIds: formState.categoryIds,
+  location: formState.location,
+  startTime: startDateTimeUTC,
+  endTime: endDateTimeUTC,
+}; */
+}
