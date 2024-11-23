@@ -1,6 +1,8 @@
 import React, { useEffect, useDisclosure } from "react";
 import { Heading, Button, Box, AspectRatio, Flex } from "@chakra-ui/react";
 import { useLoaderData, Link } from "react-router-dom";
+import DeleteEvent from "../components/DeleteEvent";
+import EditEvent from "../components/EditEvent";
 import {
   Modal,
   ModalOverlay,
@@ -50,6 +52,7 @@ export const loader = async ({ params }) => {
 
 export const EventPage = () => {
   const { event, categories, userTijdelijk } = useLoaderData();
+
   // console.log(event);
 
   useEffect(() => {
@@ -71,6 +74,40 @@ export const EventPage = () => {
   );
   // console.log("eventCategories", eventCategories);
 
+  const deleteEvent = async (eventId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        alert("Event successfully deleted");
+        window.location.href = "/";
+      } else {
+        alert("Failed to delete the event");
+      }
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      alert("An error occurred while deleting the event");
+    }
+  };
+
+  const editEvent = async (eventId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+        method: "PUT",
+      });
+      if (response.ok) {
+        alert("Event successfully edited");
+        window.location.href = "/";
+      } else {
+        alert("Failed to edit the event");
+      }
+    } catch (error) {
+      console.error("Error editing event:", error);
+      alert("An error occurred while editing the event");
+    }
+  };
+
   return (
     <Flex p={2} m={2} flexWrap="wrap" justify="center" alignItems="center">
       <div className="event">
@@ -83,17 +120,15 @@ export const EventPage = () => {
             style={{ maxWidth: "50vw", borderRadius: "8px" }}
           />
         </AspectRatio>
-        <p>{event[0].startTime}</p>
-        <p>{event[0].endTime}</p>
+        <p>Start time: {event[0].startTime}</p>
+        <p>End time: {event[0].endTime}</p>
         {/* <p>
         by{" "}
         <Link to={`/user/${event.id}`}>
           {users.find((user) => user.id === event.userId).name}
         </Link>
       </p> */}
-        <p>by {userTijdelijk[0].name}</p>
 
-        <p>{event[0]?.title || "Event title not found"}</p>
         {/* <hr /> */}
         {eventCategories.length > 0 && (
           <div className="categories">
@@ -107,6 +142,31 @@ export const EventPage = () => {
             })}
           </div>
         )}
+        <div>
+          <p>{userTijdelijk[0].name}</p>
+          <AspectRatio maxW="50px" ratio={4 / 3}>
+            <img
+              src={userTijdelijk[0].image}
+              alt={userTijdelijk[0].title}
+              style={{ maxWidth: "50vw", borderRadius: "4px" }}
+            />
+          </AspectRatio>
+        </div>
+
+        {/* <DeleteEvent></DeleteEvent>
+        <EditEvent></EditEvent> */}
+
+        {/* <Button
+          colorScheme="red"
+          m={2}
+          onClick={() => deleteEvent(event[0].id)}
+        >
+          Delete event
+        </Button>
+
+        <Button colorScheme="blue" m={2} onClick={() => editEvent(event[0].id)}>
+          Edit event
+        </Button> */}
       </div>
     </Flex>
   );
