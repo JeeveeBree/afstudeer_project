@@ -1,8 +1,19 @@
-import React, { useEffect, useDisclosure } from "react";
-import { Heading, Button, Box, AspectRatio, Flex } from "@chakra-ui/react";
-import { useLoaderData, Link } from "react-router-dom";
-import DeleteEvent from "../components/DeleteEvent";
-import EditEvent from "../components/EditEvent";
+import React, { useEffect } from "react";
+import {
+  Heading,
+  Button,
+  Box,
+  AspectRatio,
+  Flex,
+  useDisclosure,
+  Input,
+  Textarea,
+  Select,
+} from "@chakra-ui/react";
+import { useLoaderData, Link, Form } from "react-router-dom";
+// import DeleteEvent from "../components/DeleteEvent";
+// import EditEvent from "../components/EditEvent";
+import { NewEvent } from "./NewEvent";
 import {
   Modal,
   ModalOverlay,
@@ -52,6 +63,16 @@ export const loader = async ({ params }) => {
 
 export const EventPage = () => {
   const { event, categories, userTijdelijk } = useLoaderData();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
 
   // console.log(event);
 
@@ -156,17 +177,150 @@ export const EventPage = () => {
         {/* <DeleteEvent></DeleteEvent>
         <EditEvent></EditEvent> */}
 
-        {/* <Button
-          colorScheme="red"
-          m={2}
-          onClick={() => deleteEvent(event[0].id)}
-        >
+        <Button m={1} colorScheme="red" onClick={onDeleteOpen}>
           Delete event
         </Button>
+        <Modal isOpen={isDeleteOpen} onClose={onDeleteClose}>
+          <ModalOverlay
+            bg="none"
+            backdropFilter="blur(10px) hue-rotate(330deg)"
+            // backdropBlur="10px"
+            // backdropFilter="blur(10px) hue-rotate(90deg)"
+          />
+          <ModalContent>
+            <ModalHeader>Delete event</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>This will delete the event, are you sure?</ModalBody>
 
-        <Button colorScheme="blue" m={2} onClick={() => editEvent(event[0].id)}>
+            <ModalFooter>
+              <Button
+                colorScheme="red"
+                m={2}
+                onClick={() => deleteEvent(event[0].id)}
+              >
+                Delete event
+              </Button>
+              <Button onClick={onDeleteClose}>Close</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
+        <Button m={1} colorScheme="blue" onClick={onEditOpen}>
           Edit event
-        </Button> */}
+        </Button>
+        <Modal isOpen={isEditOpen} onClose={onEditClose}>
+          <ModalOverlay
+            bg="none"
+            backdropFilter="auto"
+            backdropInvert="80%"
+            backdropBlur="2px"
+          />
+          <ModalContent>
+            <ModalHeader>Edit event</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              {/* <NewEvent /> */}
+              <Form
+                method="post"
+                id="new-event-form" /*onSubmit={handleSubmit}*/
+              >
+                <span>User: </span>
+                <Select name="userId" bgColor="white" required>
+                  <option value="" disabled>
+                    Select a user
+                  </option>
+                  {/* {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.name}
+                    </option>
+                  ))} */}
+                </Select>
+
+                <Input
+                  name="title"
+                  placeholder="Title of the event"
+                  aria-label="title"
+                  bgColor="white"
+                  required
+                  mt={2}
+                />
+
+                <Input
+                  name="image"
+                  placeholder="Image URL"
+                  aria-label="image"
+                  bgColor="white"
+                  mt={2}
+                />
+
+                <span>Categories: </span>
+                <Select name="categoryIds" bgColor="white" multiple>
+                  {/* {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))} */}
+                </Select>
+
+                <Textarea
+                  name="description"
+                  placeholder="Description"
+                  aria-label="description"
+                  bgColor="white"
+                  rows={3}
+                  required
+                  mt={2}
+                />
+
+                <Input
+                  name="location"
+                  placeholder="Location"
+                  aria-label="location"
+                  bgColor="white"
+                  required
+                  mt={2}
+                />
+
+                <span>Start Date & Time: </span>
+                <Flex gap={2}>
+                  <Input
+                    name="startDate"
+                    type="date"
+                    bgColor="white"
+                    required
+                  />
+                  <Input
+                    name="startTime"
+                    type="time"
+                    bgColor="white"
+                    required
+                  />
+                </Flex>
+
+                <span>End Date & Time: </span>
+                <Flex gap={2}>
+                  <Input name="endDate" type="date" bgColor="white" required />
+                  <Input name="endTime" type="time" bgColor="white" required />
+                </Flex>
+
+                <Button type="submit" color="white" bgColor="black" mt={4}>
+                  Save Event
+                </Button>
+              </Form>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button
+                colorScheme="blue"
+                m={2}
+                onClick={() => editEvent(event[0].id)}
+              >
+                Edit event
+              </Button>
+              <Button onClick={onEditClose}>Close</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </div>
     </Flex>
   );
