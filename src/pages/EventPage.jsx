@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Heading,
   Button,
@@ -28,7 +28,7 @@ export const loader = async ({ params }) => {
   if (!params.id) {
     throw new Error("No event ID provided");
   }
-  const usersFetch = await fetch(`http://localhost:3000/users?id=2`);
+  const usersFetch = await fetch(`http://localhost:3000/users`);
   const eventFetch = await fetch(
     `http://localhost:3000/events?id=${params.id}`
   );
@@ -58,11 +58,15 @@ export const loader = async ({ params }) => {
     userTijdelijk,
     event,
     categories,
+    users,
   };
 };
 
 export const EventPage = () => {
-  const { event, categories, userTijdelijk } = useLoaderData();
+  const { event, categories, userTijdelijk, users } = useLoaderData();
+  // const [geupdateEvent, functieOmEventUpdate] = useState(event[0]);
+  // console.log("geupdateEvent", geupdateEvent);
+  const [title, setTitle] = useState("");
   const {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
@@ -114,12 +118,30 @@ export const EventPage = () => {
 
   const editEvent = async (eventId) => {
     try {
-      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
-        method: "PUT",
-      });
+      const aangepastEvent = {
+        // id: eventId.id,
+        createdBy: 1,
+        title: title,
+      };
+      console.log("aangepastEvent", aangepastEvent);
+      console.log("eventId", eventId);
+      console.log("title", title);
+      const response = await fetch(
+        `http://localhost:3000/events/${eventId.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(aangepastEvent),
+        }
+      );
+      functieOmEventUpdate(aangepastEvent);
+      console.log("geupdateEvent", geupdateEvent);
+      console.log("response", response);
       if (response.ok) {
         alert("Event successfully edited");
-        window.location.href = "/";
+        // window.location.href = "/";
       } else {
         alert("Failed to edit the event");
       }
@@ -220,6 +242,16 @@ export const EventPage = () => {
             <ModalCloseButton />
             <ModalBody>
               {/* <NewEvent /> */}
+
+              {/* <form onSubmit={submitFunctie}>
+   
+          <FormLabel>Titel:</FormLabel> */}
+
+              {/* <Button type="submit">
+          Updaten
+        </Button>
+          </form> */}
+
               <Form
                 method="post"
                 id="new-event-form" /*onSubmit={handleSubmit}*/
@@ -229,13 +261,18 @@ export const EventPage = () => {
                   <option value="" disabled>
                     Select a user
                   </option>
-                  {/* {users.map((user) => (
+                  {users.map((user) => (
                     <option key={user.id} value={user.id}>
                       {user.name}
                     </option>
-                  ))} */}
+                  ))}
                 </Select>
-
+                <Input
+                  type="text"
+                  value={event[0].title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Titel van het evenement"
+                />
                 <Input
                   name="title"
                   placeholder="Title of the event"
@@ -243,6 +280,7 @@ export const EventPage = () => {
                   bgColor="white"
                   required
                   mt={2}
+                  // onChange={}
                 />
 
                 <Input
@@ -255,11 +293,11 @@ export const EventPage = () => {
 
                 <span>Categories: </span>
                 <Select name="categoryIds" bgColor="white" multiple>
-                  {/* {categories.map((category) => (
+                  {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
                     </option>
-                  ))} */}
+                  ))}
                 </Select>
 
                 <Textarea
@@ -313,7 +351,7 @@ export const EventPage = () => {
               <Button
                 colorScheme="blue"
                 m={2}
-                onClick={() => editEvent(event[0].id)}
+                onClick={() => editEvent(event[0])}
               >
                 Edit event
               </Button>
