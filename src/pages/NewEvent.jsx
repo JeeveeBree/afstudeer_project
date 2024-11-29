@@ -1,5 +1,6 @@
 import { Form, useLoaderData, redirect } from "react-router-dom";
 import { Flex, Input, Select, Textarea, Button } from "@chakra-ui/react";
+// import { Toaster, toaster } from "@/components/ui/toaster";
 
 const convertLocalToUTC = (date) => {
   const utcDate = new Date(date);
@@ -56,9 +57,17 @@ export const NewEvent = () => {
       headers: { "Content-Type": "application/json" },
     });
 
+    // toaster.create({
+    //   title: "Toast Title",
+    //   description: "Toast Description",
+    // });
+
     if (response.ok) {
       const result = await response.json();
       console.log("Event created:", result);
+      alert("Event successfully created!");
+      // <Toaster />;
+      window.location.href = "/";
     } else {
       console.error("Error creating event:", response.statusText);
     }

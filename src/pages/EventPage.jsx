@@ -64,7 +64,7 @@ export const loader = async ({ params }) => {
 
 export const EventPage = () => {
   const { event, categories, userTijdelijk, users } = useLoaderData();
-  // const [geupdateEvent, functieOmEventUpdate] = useState(event[0]);
+  const [geupdateEvent, functieOmEventUpdate] = useState(event[0]);
   // console.log("geupdateEvent", geupdateEvent);
   const [title, setTitle] = useState("");
   const {
@@ -140,14 +140,14 @@ export const EventPage = () => {
       console.log("geupdateEvent", geupdateEvent);
       console.log("response", response);
       if (response.ok) {
-        alert("Event successfully edited");
+        alert("Event successfully edited.");
         // window.location.href = "/";
       } else {
-        alert("Failed to edit the event");
+        alert("Failed to edit the event.");
       }
     } catch (error) {
       console.error("Error editing event:", error);
-      alert("An error occurred while editing the event");
+      alert("An error occurred while editing the event.");
     }
   };
 
@@ -257,7 +257,7 @@ export const EventPage = () => {
                 id="new-event-form" /*onSubmit={handleSubmit}*/
               >
                 <span>User: </span>
-                <Select name="userId" bgColor="white" required>
+                <Select name="userId" m={1} required>
                   <option value="" disabled>
                     Select a user
                   </option>
@@ -272,27 +272,21 @@ export const EventPage = () => {
                   value={event[0].title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Titel van het evenement"
-                />
-                <Input
-                  name="title"
-                  placeholder="Title of the event"
-                  aria-label="title"
-                  bgColor="white"
                   required
-                  mt={2}
-                  // onChange={}
+                  m={1}
                 />
 
                 <Input
                   name="image"
+                  value={event[0].image}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="Image URL"
-                  aria-label="image"
-                  bgColor="white"
-                  mt={2}
+                  required
+                  m={1}
                 />
 
                 <span>Categories: </span>
-                <Select name="categoryIds" bgColor="white" multiple>
+                <Select m={1} name="categoryIds" multiple required>
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
@@ -302,21 +296,21 @@ export const EventPage = () => {
 
                 <Textarea
                   name="description"
+                  value={event[0].description}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="Description"
-                  aria-label="description"
-                  bgColor="white"
                   rows={3}
                   required
-                  mt={2}
+                  m={1}
                 />
 
                 <Input
                   name="location"
                   placeholder="Location"
-                  aria-label="location"
-                  bgColor="white"
+                  value={event[0].location}
+                  onChange={(e) => setTitle(e.target.value)}
                   required
-                  mt={2}
+                  m={1}
                 />
 
                 <span>Start Date & Time: </span>
