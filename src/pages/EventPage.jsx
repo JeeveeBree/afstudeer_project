@@ -39,10 +39,6 @@ export const loader = async ({ params }) => {
   const event = await eventFetch.json();
   const categories = await categoriesFetch.json();
 
-  // if (!users.ok || !event.ok || !categories.ok) {
-  //   throw new Error("Failed to fetch data");
-  // }
-
   // console.log("Users:", users);
   // console.log("Event:", event);
   // console.log("Categories:", categories);
@@ -121,55 +117,6 @@ export const EventPage = () => {
     }
   };
 
-  // const editEvent = async (eventId) => {
-  //   try {
-  //     const formData = new FormData(event[0].target);
-  //     const aangepastEvent = {
-  //       id: undefined,
-  //       createdBy: formData.get("userId"),
-  //       // id: eventId.id,
-  //       // createdBy: 1,
-  //       title: title,
-  //     };
-  //     // const aangepastEvent = {
-  //     //   id: id,
-  //     //   createdBy: createdBy,
-  //     //   title: title,
-  //     //   description: description,
-  //     //   image: image,
-  //     //   categoryIds: categoryIds,
-  //     //   location: location,
-  //     //   startTime: startTime,
-  //     //   endTime: endTime,
-  //     // };
-  //     console.log("aangepastEvent", aangepastEvent);
-  //     console.log("eventId", eventId);
-  //     console.log("title", title);
-  //     const response = await fetch(
-  //       `http://localhost:3000/events/${eventId.id}`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(aangepastEvent),
-  //       }
-  //     );
-  //     functieOmEventUpdate(aangepastEvent);
-  //     console.log("geupdateEvent", geupdateEvent);
-  //     console.log("response", response);
-  //     if (response.ok) {
-  //       alert("Event successfully edited.");
-  //       // window.location.href = "/";
-  //     } else {
-  //       alert("Failed to edit the event.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error editing event:", error);
-  //     alert("An error occurred while editing the event.");
-  //   }
-  // };
-
   const fetchUpdatedEvent = async (eventId) => {
     try {
       const response = await fetch(
@@ -177,7 +124,7 @@ export const EventPage = () => {
       );
       if (response.ok) {
         const updatedEvent = await response.json();
-        functieOmEventUpdate(updatedEvent[0]); // Update de state met het bijgewerkte event
+        functieOmEventUpdate(updatedEvent[0]);
       } else {
         console.error("Failed to fetch updated event.");
       }
@@ -201,7 +148,7 @@ export const EventPage = () => {
           formElement.querySelectorAll(
             "select[name='categoryIds'] option:checked"
           )
-        ).map((option) => option.value),
+        ).map((option) => Number(option.value)),
         location: location /*formData.get("location")*/,
         startTime: `${formData.get("startDate")}T${formData.get("startTime")}`,
         endTime: `${formData.get("endDate")}T${formData.get("endTime")}`,
@@ -225,7 +172,7 @@ export const EventPage = () => {
 
         await fetchUpdatedEvent(eventId.id);
         functieOmEventUpdate(eventEdited);
-        // window.location.href = "/";
+        window.location.href = "/";
       } else {
         alert("Failed to edit the event.");
       }
@@ -247,16 +194,6 @@ export const EventPage = () => {
             style={{ maxWidth: "50vw", borderRadius: "8px" }}
           />
         </AspectRatio>
-        <p>Start time: {event[0].startTime}</p>
-        <p>End time: {event[0].endTime}</p>
-        {/* <p>
-        by{" "}
-        <Link to={`/user/${event.id}`}>
-          {users.find((user) => user.id === event.userId).name}
-        </Link>
-      </p> */}
-
-        {/* <hr /> */}
         {eventCategories.length > 0 && (
           <div className="categories">
             <h2>Categories:</h2>
@@ -269,6 +206,9 @@ export const EventPage = () => {
             })}
           </div>
         )}
+        <p>Start time: {event[0].startTime}</p>
+        <p>End time: {event[0].endTime}</p>
+
         <div>
           <p>{userTijdelijk[0].name}</p>
           <AspectRatio maxW="50px" ratio={4 / 3}>
@@ -279,9 +219,6 @@ export const EventPage = () => {
             />
           </AspectRatio>
         </div>
-
-        {/* <DeleteEvent></DeleteEvent>
-        <EditEvent></EditEvent> */}
 
         <Button m={1} colorScheme="red" onClick={onDeleteOpen}>
           Delete event
@@ -325,21 +262,7 @@ export const EventPage = () => {
             <ModalHeader>Edit event</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              {/* <NewEvent /> */}
-
-              {/* <form onSubmit={submitFunctie}>
-   
-          <FormLabel>Titel:</FormLabel> */}
-
-              {/* <Button type="submit">
-          Updaten
-        </Button>
-          </form> */}
-
-              <Form
-                method="post"
-                id="edit-event-form" /*onSubmit={handleSubmit}*/
-              >
+              <Form method="post" id="edit-event-form">
                 <span>User: </span>
                 <Select name="userId" m={1} required>
                   <option value="" disabled>
@@ -351,6 +274,7 @@ export const EventPage = () => {
                     </option>
                   ))}
                 </Select>
+                <span>Title: </span>
                 <Input
                   type="text"
                   value={title}
@@ -359,7 +283,7 @@ export const EventPage = () => {
                   required
                   m={1}
                 />
-
+                <span>Image: </span>
                 <Input
                   type="text"
                   value={image}
@@ -377,7 +301,7 @@ export const EventPage = () => {
                     </option>
                   ))}
                 </Select>
-
+                <span>Description: </span>
                 <Textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -386,7 +310,7 @@ export const EventPage = () => {
                   required
                   m={1}
                 />
-
+                <span>Location: </span>
                 <Input
                   type="text"
                   value={location}
@@ -436,42 +360,3 @@ export const EventPage = () => {
     </Flex>
   );
 };
-
-// export const EventPage = () => {
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       const response = await fetch(`http://localhost:3000/events?id=1`);
-//       const data = await response.json();
-//       console.log("Fetched data:", data);
-//     };
-//     fetchData();
-//   }, []);
-
-//   return (
-//     <div>
-//       <Heading>Event</Heading>
-//       <div>Testing direct fetch...</div>
-//     </div>
-//   );
-// };
-
-// export const loader = async ({ params }) => {
-//   if (!params.id) {
-//     throw new Error("No event ID provided");
-//   }
-//   const [users, event, categories] = await Promise.all([
-//     fetch(`http://localhost:3000/users?id=${params.id}`),
-//     fetch(`http://localhost:3000/events?id=${params.id}`),
-//     fetch(`http://localhost:3000/categories?id=${params.id}`),
-//   ]);
-//   console.log(params.id);
-//   if (!users.ok || !event.ok || !categories.ok) {
-//     throw new Error("Failed to fetch data");
-//   }
-
-//   return {
-//     users: await users.json(),
-//     event: await event.json(),
-//     categories: await categories.json(),
-//   };
-// };
