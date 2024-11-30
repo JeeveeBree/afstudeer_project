@@ -67,7 +67,7 @@ export const NewEvent = () => {
       console.log("Event created:", result);
       alert("Event successfully created!");
       // <Toaster />;
-      window.location.href = "/";
+      // window.location.href = "/";
     } else {
       console.error("Error creating event:", response.statusText);
     }

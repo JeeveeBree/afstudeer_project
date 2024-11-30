@@ -66,7 +66,12 @@ export const EventPage = () => {
   const { event, categories, userTijdelijk, users } = useLoaderData();
   const [geupdateEvent, functieOmEventUpdate] = useState(event[0]);
   // console.log("geupdateEvent", geupdateEvent);
-  const [title, setTitle] = useState("");
+  // const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(event[0].title || "");
+  const [description, setDescription] = useState(event[0].description || "");
+  const [image, setImage] = useState(event[0].image || "");
+  const [location, setLocation] = useState(event[0].location || "");
+
   const {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
@@ -116,16 +121,94 @@ export const EventPage = () => {
     }
   };
 
+  // const editEvent = async (eventId) => {
+  //   try {
+  //     const formData = new FormData(event[0].target);
+  //     const aangepastEvent = {
+  //       id: undefined,
+  //       createdBy: formData.get("userId"),
+  //       // id: eventId.id,
+  //       // createdBy: 1,
+  //       title: title,
+  //     };
+  //     // const aangepastEvent = {
+  //     //   id: id,
+  //     //   createdBy: createdBy,
+  //     //   title: title,
+  //     //   description: description,
+  //     //   image: image,
+  //     //   categoryIds: categoryIds,
+  //     //   location: location,
+  //     //   startTime: startTime,
+  //     //   endTime: endTime,
+  //     // };
+  //     console.log("aangepastEvent", aangepastEvent);
+  //     console.log("eventId", eventId);
+  //     console.log("title", title);
+  //     const response = await fetch(
+  //       `http://localhost:3000/events/${eventId.id}`,
+  //       {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(aangepastEvent),
+  //       }
+  //     );
+  //     functieOmEventUpdate(aangepastEvent);
+  //     console.log("geupdateEvent", geupdateEvent);
+  //     console.log("response", response);
+  //     if (response.ok) {
+  //       alert("Event successfully edited.");
+  //       // window.location.href = "/";
+  //     } else {
+  //       alert("Failed to edit the event.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error editing event:", error);
+  //     alert("An error occurred while editing the event.");
+  //   }
+  // };
+
+  const fetchUpdatedEvent = async (eventId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/events?id=${eventId}`
+      );
+      if (response.ok) {
+        const updatedEvent = await response.json();
+        functieOmEventUpdate(updatedEvent[0]); // Update de state met het bijgewerkte event
+      } else {
+        console.error("Failed to fetch updated event.");
+      }
+    } catch (error) {
+      console.error("Error fetching updated event:", error);
+    }
+  };
+
   const editEvent = async (eventId) => {
     try {
-      const aangepastEvent = {
-        // id: eventId.id,
-        createdBy: 1,
-        title: title,
+      const formElement = document.getElementById("edit-event-form");
+      const formData = new FormData(formElement);
+
+      const eventEdited = {
+        id: eventId.id,
+        createdBy: formData.get("userId"),
+        title: title /*formData.get("title"),*/,
+        description: description /*formData.get("description")*/,
+        image: image /*formData.get("image")*/,
+        categoryIds: Array.from(
+          formElement.querySelectorAll(
+            "select[name='categoryIds'] option:checked"
+          )
+        ).map((option) => option.value),
+        location: location /*formData.get("location")*/,
+        startTime: `${formData.get("startDate")}T${formData.get("startTime")}`,
+        endTime: `${formData.get("endDate")}T${formData.get("endTime")}`,
       };
-      console.log("aangepastEvent", aangepastEvent);
-      console.log("eventId", eventId);
-      console.log("title", title);
+
+      console.log("aangepastEvent", eventEdited);
+
       const response = await fetch(
         `http://localhost:3000/events/${eventId.id}`,
         {
@@ -133,14 +216,15 @@ export const EventPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(aangepastEvent),
+          body: JSON.stringify(eventEdited),
         }
       );
-      functieOmEventUpdate(aangepastEvent);
-      console.log("geupdateEvent", geupdateEvent);
-      console.log("response", response);
+
       if (response.ok) {
         alert("Event successfully edited.");
+
+        await fetchUpdatedEvent(eventId.id);
+        functieOmEventUpdate(eventEdited);
         // window.location.href = "/";
       } else {
         alert("Failed to edit the event.");
@@ -254,7 +338,7 @@ export const EventPage = () => {
 
               <Form
                 method="post"
-                id="new-event-form" /*onSubmit={handleSubmit}*/
+                id="edit-event-form" /*onSubmit={handleSubmit}*/
               >
                 <span>User: </span>
                 <Select name="userId" m={1} required>
@@ -269,7 +353,7 @@ export const EventPage = () => {
                 </Select>
                 <Input
                   type="text"
-                  value={event[0].title}
+                  value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Titel van het evenement"
                   required
@@ -277,9 +361,9 @@ export const EventPage = () => {
                 />
 
                 <Input
-                  name="image"
-                  value={event[0].image}
-                  onChange={(e) => setTitle(e.target.value)}
+                  type="text"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
                   placeholder="Image URL"
                   required
                   m={1}
@@ -295,9 +379,8 @@ export const EventPage = () => {
                 </Select>
 
                 <Textarea
-                  name="description"
-                  value={event[0].description}
-                  onChange={(e) => setTitle(e.target.value)}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   placeholder="Description"
                   rows={3}
                   required
@@ -305,10 +388,10 @@ export const EventPage = () => {
                 />
 
                 <Input
-                  name="location"
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
                   placeholder="Location"
-                  value={event[0].location}
-                  onChange={(e) => setTitle(e.target.value)}
                   required
                   m={1}
                 />
@@ -334,10 +417,6 @@ export const EventPage = () => {
                   <Input name="endDate" type="date" bgColor="white" required />
                   <Input name="endTime" type="time" bgColor="white" required />
                 </Flex>
-
-                <Button type="submit" color="white" bgColor="black" mt={4}>
-                  Save Event
-                </Button>
               </Form>
             </ModalBody>
 

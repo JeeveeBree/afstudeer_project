@@ -67,23 +67,6 @@ export const EventsPage = () => {
     filterEvents();
   }, [searchQuery, selectedCategory]);
 
-  const deleteEvent = async (eventId) => {
-    try {
-      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
-        method: "DELETE",
-      });
-      if (response.ok) {
-        alert("Event successfully deleted");
-        window.location.href = "/";
-      } else {
-        alert("Failed to delete the event");
-      }
-    } catch (error) {
-      console.error("Error deleting event:", error);
-      alert("An error occurred while deleting the event");
-    }
-  };
-
   return (
     <Center>
       <List spacing={4}>
@@ -163,13 +146,6 @@ export const EventsPage = () => {
                             .join(", ")
                         : "No categories"}
                     </p>
-                    <Button
-                      colorScheme="red"
-                      m={2}
-                      onClick={() => deleteEvent(event[0].id)}
-                    >
-                      Delete event
-                    </Button>
                   </Link>
                 </Box>
               ))}
